@@ -32,4 +32,5 @@ TEST(OpTest, OpPrintZero) {
     Base* test = new Op(0);
     EXPECT_EQ(test->stringify(), "0.000000");
 }
+
 #endif //__OP_TEST_HPP__
