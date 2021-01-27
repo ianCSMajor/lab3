@@ -3,101 +3,80 @@
 
 #include "base.hpp"
 #include "sstream"
+#include <math.h>
+#include <stdlib.h>
 
 class Op : public Base {
-   private:
-	double n; 
-   public:
-	Op(): n(0){}
-        Op(double value) : Base() {n=value;}
-        virtual double evaluate() { return n; }
-        virtual std::string stringify() { 
-		std::ostringstream strs;
-                strs << n;
-                std::string str = strs.str();
-                return str; 
+    public:
+        Op(double value) : Base(), val(value) { }
+        virtual double evaluate() { return val; }
+        virtual std::string stringify() { return std::to_string(val); }
+    private:
+	double val;
+};
+class Rand : public Base {
+    public:
+        Rand(): Base(), val(rand() % 100) {}
+        virtual double evaluate() { return val; }
+        virtual std::string stringify() { return std::to_string(val); }
+    private:
+	double val;
+};
+class Div : public Base {
+    public:
+	Div(Base* initVal, Base* divVal) : Base(), val1(initVal), val2(divVal) {}
+	virtual double evaluate() {
+	    if(val2 -> evaluate() == 0) {
+		return NULL;
+	    }
+	    return val1 -> evaluate() / val2 -> evaluate();
 	}
-};
-class Rand: public Base {
-     private:
-	double r;
-     public:
-        Rand():Base() { }
-        virtual double evaluate() { 
-		r=rand()%100;
-		return r;
-	 }
-        virtual std::string stringify() { 
-		std::ostringstream strs;
-		strs << r;
-		std::string str = strs.str();
-		return str;	
-	 }
-};
-class Mult : public Base{
-    private:
-	double a,b,c;
-    public:
-	Mult(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
-	virtual double evaluate(){c=a*b; return c;}
-	virtual std::string stringify(){
-		std::ostringstream strs;
-                strs << c;
-                std::string str = strs.str();
-                return str;
+	virtual std::string stringify() {
+		return val1 -> stringify() + " / " + val2 -> stringify();
 	}
-};
-class Div : public Base{
     private:
-	double a,b,c;
-    public:
-        Div(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
-        virtual double evaluate(){c=a/b; return c;}
-        virtual std::string stringify(){
-                std::ostringstream strs;
-                strs << c;
-                std::string str = strs.str();
-                return str;
-        }
+	Base* val1;
+	Base* val2;
 };
-class Add : public Base{
-    private:
-	double a,b,c;
+class Mult : public Base {
     public:
-        Add(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
-        virtual double evaluate(){c=a+b; return c;}
-        virtual std::string stringify(){
-                std::ostringstream strs;
-                strs << c;
-                std::string str = strs.str();
-                return str;
+        Mult(Base* initVal, Base* multVal) : Base(), val1(initVal), val2(multVal) {}
+        virtual double evaluate() {return val1 -> evaluate() * val2 -> evaluate(); }
+        virtual std::string stringify() {
+            return val1 -> stringify() + " * " + val2 -> stringify();
         }
+    private:
+        Base* val1;
+        Base* val2;
+};
+class Add : public Base {
+    public:
+	Add(Base* initialVal, Base* addVal): Base(), val1(initialVal), val2(addVal) {}
+	virtual double evaluate() {return val1 -> evaluate() + val2 -> evaluate();}
+	virtual std::string stringify() {
+	    return val1 -> stringify() + " + " + val2 -> stringify();
+	}
+    private:
+	Base* val1;
+	Base* val2;
 };
 class Sub : public Base{
-    private:
-        double a,b,c;
-	    public:
-		Sub(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
+        public:
+                Sub(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
         virtual double evaluate(){c=a-b; return c;}
         virtual std::string stringify(){
-                std::ostringstream strs;
-                strs << c;
-                std::string str = strs.str();
-                return str;
+                return a->stringify()+" - "+b->stringify();
         }
 };
-class Pow : public Base{
-    private:
-        double a,c;
+class Pow : public Base {
     public:
-        Pow(Base* x):Base(){a=x->evaluate;}
-        virtual double evaluate(){c=a*a; return c;}
-        virtual std::string stringify(){
-                std::ostringstream strs;
-                strs << c;
-                std::string str = strs.str();
-                return str;
-        }
+	Pow(Base* baseVal, Base* expVal) : Base(), base(baseVal), exp(expVal) {}
+	virtual double evaluate() {pow(base -> evaluate(), exp -> evaluate());}
+	virtual std::string stringify() {
+		return base -> stringify() + " ** " + exp -> stringify();
+	}
+    private:
+	Base* base;
+	Base* exp;
 };
-
 #endif //__OP_HPP__
