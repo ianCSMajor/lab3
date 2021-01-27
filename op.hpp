@@ -60,13 +60,16 @@ class Add : public Base {
 	Base* val1;
 	Base* val2;
 };
-class Sub : public Base{
-        public:
-                Sub(Base* x,Base* y):Base(){a=x->evaluate(); b=y->evaluate();}
-        virtual double evaluate(){c=a-b; return c;}
-        virtual std::string stringify(){
-                return a->stringify()+" - "+b->stringify();
-        }
+class Sub : public Base {
+    public:
+	Sub(Base* initialVal, Base* subVal): Base(), val1(initialVal), val2(subVal) {}
+	virtual double evaluate() {return val1 -> evaluate() - val2 -> evaluate();}
+	virtual std::string stringify() {
+	    return val1 -> stringify() + " - " + val2 -> stringify();
+	}
+    private:
+	Base* val1;
+	Base* val2;
 };
 class Pow : public Base {
     public:
