@@ -32,35 +32,43 @@ TEST(RandTest, RandEvaluateNonZero) {
 	EXPECT_EQ(test->evaluate(), rand() % 100);
 }
 TEST(MultTest, MultEvaluateNumber) {
+	Op* nine = new Op(9);
+	Op* eight = new Op(8);
 	Mult* test = new Mult(nine, eight);
 	EXPECT_EQ(test->evaluate(), 9 * 8);
 }
-TEST(MultTest, MultStringify) {         
+TEST(MultTest, MultStringify) {        
 	Mult* test = new Op(nine, eight);
-	EXPECT_EQ(test->stringify(), "9 * 8");
+	EXPECT_EQ(test->stringify(), "72");
 }
 TEST(DivTest, DivEvaluateNonzero) {
+	Op* twenty = new Op(20);         
+	Op* two = new Op(2);
 	Div* test = new Div(twenty, two);
 	EXPECT_EQ(test->evaluate(), 20 / 2);
 }
 TEST(DivTest, DivStringify) {         
 	Div* test = new Div(twenty, two);         
-	EXPECT_EQ(test->stringify(), "20 / 2");
+	EXPECT_EQ(test->stringify(), "10");
 }
-TEST(AddTest, AddEvaluateNonzero) {         
-	ADD* test = new ADD(add, two);    
+TEST(AddTest, AddEvaluateNonzero) { 
+	Op* two = new Op(2);        
+	Add* test = new ADD(two, mult);    
 	EXPECT_EQ(test->evaluate(), 2 + 2); } 
 TEST(AddTest, AddStringify) {         
-	Add* test = new Add(two,  two);         
+	Add* test = new Add(two,  mult);         
 	EXPECT_EQ(test->stringify(), "2 + 2"); }
-TEST(SubTest, SubEvaluateNonzero) {         
-	Sub* test = new Sub(three, two);         
+TEST(SubTest, SubEvaluateNonzero) {
+	Op* two = new Op(2);         
+	Sub* test = new Sub(add, two);         
 	EXPECT_EQ(test->evaluate(), 3 - 2); } 
 TEST(SubTest, SubStringify) {         
-	Sub* test = new Sub(three, two);
+	Sub* test = new Sub(add, two);
  	EXPECT_EQ(test->evaluate(), "3 - 2"); };        
-TEST(PowTest, PowEvaluateNonzero) {         
-	Pow* test = new Sub(three, two);        
+TEST(PowTest, PowEvaluateNonzero) {
+	Pow* three = new Pow(3);
+	Pow* two   = new Pow(2);          
+	Pow* test = new Pow(three, two);        
 	EXPECT_EQ(test->evaluate(), 3 ^ 2); } 
 TEST(PowTest, PowStringify) {         
 	Pow* test = new Pow(three, two);         
